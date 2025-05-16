@@ -24,12 +24,12 @@
 		( BlockEdit ) => {
 			return (
 				/**
-				 * @param {object} props
-				 * @param {string} props.name
-				 * @param {object} props.attributes
-				 * @param {boolean} props.attributes.showCaption
+				 * @param {Object}   props
+				 * @param {string}   props.name
+				 * @param {Object}   props.attributes
+				 * @param {boolean}  props.attributes.showCaption
 				 * @param {Function} props.setAttributes
-				 * @return {import('@wordpress/element').Element}
+				 * @return {import('@wordpress/element').Element} BlockEdit component.
 				 */
 				( props ) => {
 					if ( props.name !== 'core/post-featured-image' ) {
@@ -73,7 +73,12 @@
 							: null
 					);
 
-					return createElement( Fragment, null, blockControls, figure );
+					return createElement(
+						Fragment,
+						null,
+						blockControls,
+						figure
+					);
 				}
 			);
 		},
