@@ -22,58 +22,60 @@
 
 	const withFeaturedImageCaptionControl = createHigherOrderComponent(
 		( BlockEdit ) => {
-			/**
-			 * @param {object} props
-			 * @param {string} props.name
-			 * @param {object} props.attributes
-			 * @param {boolean} props.attributes.showCaption
-			 * @param {Function} props.setAttributes
-			 * @return ReactElement
-			 */
-			return ( props ) => {
-				if ( props.name !== 'core/post-featured-image' ) {
-					return createElement( BlockEdit, props );
+			return (
+				/**
+				 * @param {object} props
+				 * @param {string} props.name
+				 * @param {object} props.attributes
+				 * @param {boolean} props.attributes.showCaption
+				 * @param {Function} props.setAttributes
+				 * @return {import('@wordpress/element').Element}
+				 */
+				( props ) => {
+					if ( props.name !== 'core/post-featured-image' ) {
+						return createElement( BlockEdit, props );
+					}
+
+					const { attributes, setAttributes } = props;
+					const { showCaption } = attributes;
+
+					const toolbarButton = createElement( ToolbarButton, {
+						icon: captionIcon,
+						label: showCaption
+							? __( 'Remove caption' ) // Text domain omitted to re-use strings in WP core.
+							: __( 'Add caption' ),
+						onClick: () =>
+							setAttributes( { showCaption: ! showCaption } ),
+						isActive: !! showCaption,
+						showTooltip: true,
+					} );
+
+					const blockControls = createElement(
+						BlockControls,
+						{ group: 'block' },
+						createElement( ToolbarGroup, null, toolbarButton )
+					);
+
+					const figure = createElement(
+						'figure',
+						{
+							className: 'wp-block-post-featured-image',
+						},
+						createElement( BlockEdit, props ),
+						showCaption
+							? createElement(
+									'figcaption',
+									{
+										className: 'wp-element-caption',
+									},
+									'(Any caption provided for the current featured image in the Media Library will go here.)' // TODO: Translate.
+							  )
+							: null
+					);
+
+					return createElement( Fragment, null, blockControls, figure );
 				}
-
-				const { attributes, setAttributes } = props;
-				const { showCaption } = attributes;
-
-				const toolbarButton = createElement( ToolbarButton, {
-					icon: captionIcon,
-					label: showCaption
-						? __( 'Remove caption' ) // Text domain omitted to re-use strings in WP core.
-						: __( 'Add caption' ),
-					onClick: () =>
-						setAttributes( { showCaption: ! showCaption } ),
-					isActive: !! showCaption,
-					showTooltip: true,
-				} );
-
-				const blockControls = createElement(
-					BlockControls,
-					{ group: 'block' },
-					createElement( ToolbarGroup, null, toolbarButton )
-				);
-
-				const figure = createElement(
-					'figure',
-					{
-						className: 'wp-block-post-featured-image',
-					},
-					createElement( BlockEdit, props ),
-					showCaption
-						? createElement(
-								'figcaption',
-								{
-									className: 'wp-element-caption',
-								},
-								'(Any caption provided for the current featured image in the Media Library will go here.)' // TODO: Translate.
-						  )
-						: null
-				);
-
-				return createElement( Fragment, null, blockControls, figure );
-			};
+			);
 		},
 		'withFeaturedImageCaptionControl'
 	);
