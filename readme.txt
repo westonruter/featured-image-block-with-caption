@@ -19,9 +19,9 @@ This is a prototype to implement [gutenberg#40946](https://github.com/WordPress/
 
 1. Download the plugin [ZIP from GitHub](https://github.com/westonruter/featured-image-block-with-caption/archive/refs/heads/main.zip) or if you have a local clone of the repo run `npm run plugin-zip`.
 2. Visit **Plugins > Add New Plugin** in the WordPress Admin.
-3. Click **Upload Plugin**
+3. Click **Upload Plugin**.
 4. Select the `featured-image-block-with-caption.zip` file on your system from step 1 and click **Install Now**.
-5. Click the **Active Plugin** button.
+5. Click the **Activate Plugin** button.
 
 You may also install and update via [Git Updater](https://git-updater.com/).
 
