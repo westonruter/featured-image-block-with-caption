@@ -77,29 +77,24 @@ function enqueue_block_editor_assets(): void {
 add_action( 'enqueue_block_editor_assets', enqueue_block_editor_assets( ... ) );
 
 /**
- * Registers the stylesheet for the Featured Image block to support a caption.
+ * Adds inline style for the Featured Image block to support a caption.
  *
- * The stylesheet will be enqueued if a caption is rendered in the block.
+ * This is only called when a caption is to be shown in block.
  */
-function register_block_style(): void {
-	/*
-	 * The first rule in the following CSS comes from the caption-style() SASS mix-in:
-	 * https://github.com/WordPress/gutenberg/blob/5c7c4e7751df5e05fc70a354cd0d81414ac9c7e7/packages/base-styles/_mixins.scss#L220-L224
-	 * And this emulates how it is applied to the Image block's caption:
-	 * https://github.com/WordPress/gutenberg/blob/5c7c4e7751df5e05fc70a354cd0d81414ac9c7e7/packages/block-library/src/image/style.scss#L99-L104
-	 *
-	 * The second rule prevents links in the caption from being displayed as block:
-	 * https://github.com/WordPress/gutenberg/blob/5c7c4e7751df5e05fc70a354cd0d81414ac9c7e7/packages/block-library/src/post-featured-image/style.scss#L4-L7
-	 */
-	wp_register_style(
-		STYLE_HANDLE,
-		plugins_url( 'block.css', __FILE__ ),
-		array(),
-		VERSION
-	);
-	wp_style_add_data( STYLE_HANDLE, 'path', plugin_dir_path( __FILE__ ) . '/block.css' );
+function add_featured_image_block_inline_style(): void {
+	$css = (string) file_get_contents( __DIR__ . '/block.css' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+
+	// Ad hoc minification.
+	$css = trim( $css );
+	$css = (string) preg_replace( '/\/\*.*?\*\//s', '', $css ); // Remove all comments.
+	$css = (string) preg_replace( '/[\t\n]/', '', $css ); // Remove all tabs and newlines.
+	$css = (string) preg_replace( '/;(?=})/', '', $css ); // Remove the last property's semicolon.
+	$css = (string) preg_replace( '/ +(?={)/', '', $css ); // Remove spaces before the opening brace.
+	$css = (string) preg_replace( '/(?<=:) +/', '', $css ); // Remove spaces after a property's colon.
+
+	$handle = wp_should_load_separate_core_block_assets() ? 'wp-block-post-featured-image' : 'wp-block-library';
+	wp_add_inline_style( $handle, $css );
 }
-add_action( 'init', register_block_style( ... ) );
 
 /**
  * Filters the Featured Image block to add a caption on the singular template.
@@ -109,6 +104,8 @@ add_action( 'init', register_block_style( ... ) );
  * @return string The filtered block content.
  */
 function filter_featured_image_block( mixed $block_content, array $attributes ): string {
+	static $added_inline_style = false;
+
 	// Because other plugins can do bad things.
 	if ( ! is_string( $block_content ) ) {
 		$block_content = '';
@@ -158,7 +155,10 @@ function filter_featured_image_block( mixed $block_content, array $attributes ):
 		);
 
 		// Enqueue the stylesheet on demand.
-		wp_enqueue_style( STYLE_HANDLE );
+		if ( ! $added_inline_style ) {
+			add_action( 'enqueue_block_assets', add_featured_image_block_inline_style( ... ) );
+			$added_inline_style = true;
+		}
 	}
 
 	return $block_content;
@@ -171,9 +171,9 @@ add_filter(
 );
 
 // Unconditionally enqueue the block style in the editor, since we cannot conditionally enqueue during block rendering.
-add_action(
-	'enqueue_block_editor_assets',
-	static function (): void {
-		wp_enqueue_style( STYLE_HANDLE );
-	}
-);
+if ( is_admin() ) {
+	add_action(
+		'enqueue_block_assets',
+		add_featured_image_block_inline_style( ... )
+	);
+}

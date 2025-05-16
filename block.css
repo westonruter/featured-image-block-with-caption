@@ -1,8 +1,18 @@
+/*
+ * This rule in comes from the caption-style() SASS mix-in:
+ * https://github.com/WordPress/gutenberg/blob/5c7c4e7751df5e05fc70a354cd0d81414ac9c7e7/packages/base-styles/_mixins.scss#L220-L224
+ * And this emulates how it is applied to the Image block's caption:
+ * https://github.com/WordPress/gutenberg/blob/5c7c4e7751df5e05fc70a354cd0d81414ac9c7e7/packages/block-library/src/image/style.scss#L99-L104
+ */
 .wp-block-post-featured-image :where(figcaption) {
 	margin-bottom: 1em;
 	margin-top: 0.5em;
 }
 
+/*
+ * This rule prevents links in the caption from being displayed as block:
+ * https://github.com/WordPress/gutenberg/blob/5c7c4e7751df5e05fc70a354cd0d81414ac9c7e7/packages/block-library/src/post-featured-image/style.scss#L4-L7
+ */
 .wp-block-post-featured-image figcaption a {
 	display: inline;
 	height: auto;
