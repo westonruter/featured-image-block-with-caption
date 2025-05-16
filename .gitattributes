@@ -2,12 +2,12 @@
 .gitattributes export-ignore
 .gitignore export-ignore
 .husky/ export-ignore
-.lintstagedrc.mjs export-ignore
-.phpcs.xml.dist export-ignore
 composer.json export-ignore
 composer.lock export-ignore
+lint-staged.config.mjs export-ignore
 package-lock.json export-ignore
 package.json export-ignore
+phpcs.xml.dist export-ignore
 phpstan.neon.dist export-ignore
 tsconfig.json export-ignore
 types.ts export-ignore
