@@ -18,54 +18,114 @@
 
 namespace FeaturedImageBlockWithCaption;
 
+const VERSION = '0.1.0';
+
+/**
+ * Adds the 'showCaption' attribute to the server-side registration of the
+ * 'core/post-featured-image' block.
+ *
+ * This ensures WordPress is aware of our custom attribute and handles its saving
+ * and availability in server-side rendering contexts.
+ *
+ * @param array|mixed $settings Existing block type settings.
+ * @param array       $metadata Block metadata.
+ * @return array Modified block type settings.
+ */
+function add_show_caption_attribute_to_block_schema( mixed $settings, array $metadata ): array {
+	if ( ! is_array( $settings) ) {
+		$settings = array();
+	}
+	if ( 'core/post-featured-image' === $metadata['name'] ) {
+		if ( ! isset( $settings['attributes'] ) ) {
+			$settings['attributes'] = [];
+		}
+		$settings['attributes']['showCaption'] = array(
+			'type'    => 'boolean',
+			'default' => false,
+		);
+	}
+	return $settings;
+}
+add_filter( 'block_type_metadata_settings', add_show_caption_attribute_to_block_schema(...), 10, 2 );
+
+/**
+ * Enqueues block editor assets.
+ *
+ * These assets will be enqueued only in the editor.
+ */
+function enqueue_block_editor_assets(): void {
+	wp_enqueue_script(
+		'featured-image-block-with-caption-edit',
+		plugins_url( 'edit.js', __FILE__ ),
+		array(
+			'wp-block-editor',
+			'wp-blocks',
+			'wp-components',
+			'wp-compose',
+			'wp-element',
+			'wp-hooks',
+			'wp-i18n',
+		),
+		VERSION,
+		array( 'in_footer' => true )
+	);
+}
+add_action( 'enqueue_block_editor_assets', enqueue_block_editor_assets(...) );
+
 /**
  * Filters the Featured Image block to add a caption on the singular template.
  *
  * @param string|mixed $block_content The block content.
+ * @param array{ attrs: array{ showCaption?: boolean } } $attributes The block attributes.
  * @return string The filtered block content.
  */
-function filter_featured_image_block( mixed $block_content ): string {
+function filter_featured_image_block( mixed $block_content, array $attributes ): string {
 	if ( ! is_string( $block_content ) ) {
-		return '';
+		$block_content = '';
 	}
 
-	if ( is_singular() ) {
-		$caption = get_the_post_thumbnail_caption();
-		if ( $caption ) {
+	// Bail if
+	if ( ! isset( $attributes['attrs']['showCaption'] ) || ! $attributes['attrs']['showCaption'] ) {
+		return $block_content;
+	}
 
-			// Allow all markup that the block editor allows in the caption context.
-			$caption = wp_kses(
-				$caption,
-				array(
-					'a' => array(
-						'href' => true,
-					),
-					'bdo' => array(
-						'code' => array(),
-						'lang' => true,
-						'dir' => true,
-					),
-					'br' => array(),
-					'em' => array(),
-					'kbd' => array(),
-					'mark' => array(
-						'style' => true,
-						'class' => true,
-					),
-					's' => array(),
-					'strong' => array(),
-					'sub' => array(),
-					'sup' => array(),
-				)
-			);
+	$caption = get_the_post_thumbnail_caption();
+	if ( $caption ) {
 
-			$block_content = preg_replace(
-				'#(?=</figure>)#',
-				"<figcaption class='wp-element-caption'>$caption</figcaption>",
-				$block_content,
-				1
-			);
-		}
+		// Allow all markup that the block editor allows in the caption context. This may be overkill.
+		$caption = wp_kses(
+			$caption,
+			array(
+				'a' => array(
+					'href' => true,
+					'rel' => true,
+					'target' => true,
+				),
+				'bdo' => array(
+					'code' => array(),
+					'lang' => true,
+					'dir' => true,
+				),
+				'br' => array(),
+				'em' => array(),
+				'kbd' => array(),
+				'mark' => array(
+					'style' => true,
+					'class' => true,
+				),
+				's' => array(),
+				'strong' => array(),
+				'sub' => array(),
+				'sup' => array(),
+			)
+		);
+
+		$block_content = preg_replace(
+			'#(?=</figure>)#',
+			'<figcaption class="wp-element-caption">' . $caption . '</figcaption>',
+			$block_content,
+			1
+		);
 	}
 
 	return $block_content;
@@ -73,7 +133,9 @@ function filter_featured_image_block( mixed $block_content ): string {
 
 add_filter(
 	'render_block_core/post-featured-image',
-	filter_featured_image_block(...)
+	filter_featured_image_block(...),
+	10,
+	2
 );
 
 /**
@@ -81,6 +143,8 @@ add_filter(
  *
  * This function injects CSS rules for styling the Post Featured Image block's caption and its links.
  * The CSS is minified before being added to optimize performance.
+ *
+ * TODO: Only do this if present on the page.
  */
 function add_post_featured_image_style(): void {
 	/*
@@ -113,4 +177,4 @@ function add_post_featured_image_style(): void {
 	wp_add_inline_style( 'wp-block-post-featured-image', $css );
 }
 
-add_action( 'wp_enqueue_scripts', add_post_featured_image_style(...) );
+add_action( 'enqueue_block_assets', add_post_featured_image_style(...) );

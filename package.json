@@ -1,0 +1,21 @@
+{
+  "name": "featured-image-block-with-caption",
+  "author": "Weston Ruter",
+  "license": "GPL-2.0-or-later",
+  "description": "",
+  "prettier": "@wordpress/prettier-config",
+  "devDependencies": {
+    "@wordpress/block-editor": "^14.18.0",
+    "@wordpress/components": "^29.9.0",
+    "@wordpress/compose": "^7.23.0",
+    "@wordpress/element": "^6.23.0",
+    "@wordpress/hooks": "^4.23.0",
+    "@wordpress/i18n": "^5.23.0",
+    "@wordpress/scripts": "^30.16.0",
+    "typescript": "^5.8.3"
+  },
+  "scripts": {
+    "tsc": "tsc",
+    "dist": "zip featured-image-block-with-caption.zip featured-image-block-with-caption.php edit.js"
+  }
+}
