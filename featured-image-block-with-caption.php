@@ -25,21 +25,24 @@ const STYLE_HANDLE = 'featured-image-block-with-caption';
 const BLOCK_NAME = 'core/post-featured-image';
 
 /**
- * Adds the 'showCaption' attribute to the server-side registration of the
- * 'core/post-featured-image' block.
+ * Adds the 'showCaption' attribute to the server-side registration of the Featured Image block.
  *
- * This ensures WordPress is aware of our custom attribute and handles its saving
- * and availability in server-side rendering contexts.
- *
- * @param array{ attributes?: array<string, array{ type: string, default: bool }> } $settings Existing block type settings.
- * @param array{ name: non-empty-string }       $metadata Block metadata.
+ * @param array{ attributes?: array<string, array{ type: string, default: bool }> }|mixed $settings Existing block type settings.
+ * @param array{ name: non-empty-string }                                                 $metadata Block metadata.
  * @return array{ attributes?: array<string, array{ type: string, default: bool }> } Modified block type settings.
  */
 function add_show_caption_attribute_to_block_schema( mixed $settings, array $metadata ): array {
-	if ( ! is_array( $settings) ) { // @phpstan-ignore function.alreadyNarrowedType (Because another plugin could do a bad thing.)
-		$settings = array();
+	// Because other plugins can do bad things.
+	if ( ! is_array( $settings ) ) {
+		$settings = array( 'attributes' => array() );
 	}
-	if ( 'core/post-featured-image' === $metadata['name'] ) {
+	/**
+	 * Settings.
+	 *
+	 * @var array{ attributes: array<string, array{ type: string, default: bool }> } $settings
+	 */
+
+	if ( BLOCK_NAME === $metadata['name'] ) {
 		$settings['attributes']['showCaption'] = array(
 			'type'    => 'boolean',
 			'default' => false,
@@ -47,7 +50,7 @@ function add_show_caption_attribute_to_block_schema( mixed $settings, array $met
 	}
 	return $settings;
 }
-add_filter( 'block_type_metadata_settings', add_show_caption_attribute_to_block_schema(...), 10, 2 );
+add_filter( 'block_type_metadata_settings', add_show_caption_attribute_to_block_schema( ... ), 10, 2 );
 
 /**
  * Enqueues block editor assets.
@@ -71,7 +74,7 @@ function enqueue_block_editor_assets(): void {
 		array( 'in_footer' => true )
 	);
 }
-add_action( 'enqueue_block_editor_assets', enqueue_block_editor_assets(...) );
+add_action( 'enqueue_block_editor_assets', enqueue_block_editor_assets( ... ) );
 
 /**
  * Registers the stylesheet for the Featured Image block to support a caption.
@@ -96,17 +99,18 @@ function register_block_style(): void {
 	);
 	wp_style_add_data( STYLE_HANDLE, 'path', plugin_dir_path( __FILE__ ) . '/block.css' );
 }
-add_action( 'init', register_block_style(...) );
+add_action( 'init', register_block_style( ... ) );
 
 /**
  * Filters the Featured Image block to add a caption on the singular template.
  *
- * @param string $block_content The block content.
+ * @param string|mixed                                   $block_content The block content.
  * @param array{ attrs: array{ showCaption?: boolean } } $attributes The block attributes.
  * @return string The filtered block content.
  */
 function filter_featured_image_block( mixed $block_content, array $attributes ): string {
-	if ( ! is_string( $block_content ) ) { // @phpstan-ignore function.alreadyNarrowedType (Because another plugin could do a bad thing.)
+	// Because other plugins can do bad things.
+	if ( ! is_string( $block_content ) ) {
 		$block_content = '';
 	}
 
@@ -122,27 +126,27 @@ function filter_featured_image_block( mixed $block_content, array $attributes ):
 		$caption = wp_kses(
 			$caption,
 			array(
-				'a' => array(
-					'href' => true,
-					'rel' => true,
+				'a'      => array(
+					'href'   => true,
+					'rel'    => true,
 					'target' => true,
 				),
-				'bdo' => array(
+				'bdo'    => array(
 					'code' => array(),
 					'lang' => true,
-					'dir' => true,
+					'dir'  => true,
 				),
-				'br' => array(),
-				'em' => array(),
-				'kbd' => array(),
-				'mark' => array(
+				'br'     => array(),
+				'em'     => array(),
+				'kbd'    => array(),
+				'mark'   => array(
 					'style' => true,
 					'class' => true,
 				),
-				's' => array(),
+				's'      => array(),
 				'strong' => array(),
-				'sub' => array(),
-				'sup' => array(),
+				'sub'    => array(),
+				'sup'    => array(),
 			)
 		);
 
@@ -161,7 +165,7 @@ function filter_featured_image_block( mixed $block_content, array $attributes ):
 }
 add_filter(
 	'render_block_' . BLOCK_NAME,
-	filter_featured_image_block(...),
+	filter_featured_image_block( ... ),
 	10,
 	2
 );

@@ -12,16 +12,19 @@
 		"@wordpress/hooks": "^4.23.0",
 		"@wordpress/i18n": "^5.23.0",
 		"@wordpress/scripts": "^30.16.0",
+		"husky": "^9.1.7",
+		"lint-staged": "^16.0.0",
 		"typescript": "^5.8.3"
 	},
 	"scripts": {
 		"check-engines": "wp-scripts check-engines",
-		"format": "wp-scripts format && wp-scripts lint-style --fix && wp-scripts lint-js --fix",
-		"lint": "tsc && npm run lint:css && npm run lint:js && composer phpstan",
+		"format": "wp-scripts format && wp-scripts lint-style --fix && wp-scripts lint-js --fix && composer phpcbf",
+		"lint": "tsc && npm run lint:css && npm run lint:js && composer phpstan && composer phpcs",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
 		"lint:pkg-json": "wp-scripts lint-pkg-json",
 		"packages-update": "wp-scripts packages-update",
-		"plugin-zip": "git archive --format=zip --output=featured-image-block-with-caption.zip HEAD"
+		"plugin-zip": "git archive --format=zip --output=featured-image-block-with-caption.zip HEAD",
+		"prepare": "husky"
 	}
 }
