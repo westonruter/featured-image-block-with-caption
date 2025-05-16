@@ -169,3 +169,11 @@ add_filter(
 	10,
 	2
 );
+
+// Unconditionally enqueue the block style in the editor, since we cannot conditionally enqueue during block rendering.
+add_action(
+	'enqueue_block_editor_assets',
+	static function (): void {
+		wp_enqueue_style( STYLE_HANDLE );
+	}
+);
