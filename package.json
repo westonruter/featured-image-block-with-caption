@@ -16,12 +16,12 @@
 	},
 	"scripts": {
 		"check-engines": "wp-scripts check-engines",
-		"dist": "zip featured-image-block-with-caption.zip featured-image-block-with-caption.php edit.js",
-		"format": "wp-scripts format",
+		"format": "wp-scripts format && wp-scripts lint-style --fix",
+		"lint": "tsc && npm run lint:css && npm run lint:js",
 		"lint:css": "wp-scripts lint-style",
-		"lint:js": "tsc && wp-scripts lint-js",
+		"lint:js": "wp-scripts lint-js",
 		"lint:pkg-json": "wp-scripts lint-pkg-json",
 		"packages-update": "wp-scripts packages-update",
-		"tsc": "tsc"
+		"plugin-zip": "zip featured-image-block-with-caption.zip featured-image-block-with-caption.php edit.js"
 	}
 }
