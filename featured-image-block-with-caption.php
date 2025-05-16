@@ -20,6 +20,10 @@ namespace FeaturedImageBlockWithCaption;
 
 const VERSION = '0.1.0';
 
+const STYLE_HANDLE = 'featured-image-block-with-caption';
+
+const BLOCK_NAME = 'core/post-featured-image';
+
 /**
  * Adds the 'showCaption' attribute to the server-side registration of the
  * 'core/post-featured-image' block.
@@ -73,6 +77,32 @@ function enqueue_block_editor_assets(): void {
 add_action( 'enqueue_block_editor_assets', enqueue_block_editor_assets(...) );
 
 /**
+ * Registers the stylesheet for the Featured Image block to support a caption.
+ *
+ * The stylesheet will be enqueued if a caption is rendered in the block.
+ */
+function register_block_style(): void {
+	/*
+	 * The first rule in the following CSS comes from the caption-style() SASS mix-in:
+	 * https://github.com/WordPress/gutenberg/blob/5c7c4e7751df5e05fc70a354cd0d81414ac9c7e7/packages/base-styles/_mixins.scss#L220-L224
+	 * And this emulates how it is applied to the Image block's caption:
+	 * https://github.com/WordPress/gutenberg/blob/5c7c4e7751df5e05fc70a354cd0d81414ac9c7e7/packages/block-library/src/image/style.scss#L99-L104
+	 *
+	 * The second rule prevents links in the caption from being displayed as block:
+	 * https://github.com/WordPress/gutenberg/blob/5c7c4e7751df5e05fc70a354cd0d81414ac9c7e7/packages/block-library/src/post-featured-image/style.scss#L4-L7
+	 */
+	wp_register_style(
+		STYLE_HANDLE,
+		plugins_url( 'block.css', __FILE__ ),
+		array(),
+		VERSION
+	);
+	wp_style_add_data( STYLE_HANDLE, 'path', plugin_dir_path( __FILE__ ) . '/block.css' );
+}
+
+add_action( 'init', register_block_style(...) );
+
+/**
  * Filters the Featured Image block to add a caption on the singular template.
  *
  * @param string|mixed $block_content The block content.
@@ -84,7 +114,7 @@ function filter_featured_image_block( mixed $block_content, array $attributes ):
 		$block_content = '';
 	}
 
-	// Bail if
+	// Bail if showing the caption is not requested.
 	if ( ! isset( $attributes['attrs']['showCaption'] ) || ! $attributes['attrs']['showCaption'] ) {
 		return $block_content;
 	}
@@ -126,55 +156,17 @@ function filter_featured_image_block( mixed $block_content, array $attributes ):
 			$block_content,
 			1
 		);
+
+		// Enqueue the stylesheet on demand.
+		wp_enqueue_style( STYLE_HANDLE );
 	}
 
 	return $block_content;
 }
 
 add_filter(
-	'render_block_core/post-featured-image',
+	'render_block_' . BLOCK_NAME,
 	filter_featured_image_block(...),
 	10,
 	2
 );
-
-/**
- * Adds custom inline styles to the Post Featured Image block.
- *
- * This function injects CSS rules for styling the Post Featured Image block's caption and its links.
- * The CSS is minified before being added to optimize performance.
- *
- * TODO: Only do this if present on the page.
- */
-function add_post_featured_image_style(): void {
-	/*
-	 * The first rule in the following CSS comes from the caption-style() SASS mix-in:
-	 * https://github.com/WordPress/gutenberg/blob/5c7c4e7751df5e05fc70a354cd0d81414ac9c7e7/packages/base-styles/_mixins.scss#L220-L224
-	 * And this emulates how it is applied to the Image block's caption:
-	 * https://github.com/WordPress/gutenberg/blob/5c7c4e7751df5e05fc70a354cd0d81414ac9c7e7/packages/block-library/src/image/style.scss#L99-L104
-	 *
-	 * The second rule prevents links in the caption from being displayed as block:
-	 * https://github.com/WordPress/gutenberg/blob/5c7c4e7751df5e05fc70a354cd0d81414ac9c7e7/packages/block-library/src/post-featured-image/style.scss#L4-L7
-	 */
-	$css = <<<CSS
-	.wp-block-post-featured-image :where(figcaption) {
-		margin-bottom: 1em;
-		margin-top: .5em;
-	}
-
-	.wp-block-post-featured-image figcaption a {
-		display: inline;
-		height: auto;
-	}
-	CSS;
-
-	// Ad hoc minification.
-	$css = preg_replace( '/[\t\n]/', '', $css ); // Remove all tabs and newlines.
-	$css = preg_replace( '/;(?=})/', '', $css ); // Remove the last property's semicolon.
-	$css = preg_replace( '/ +(?={)/', '', $css ); // Remove spaces before the opening brace.
-	$css = preg_replace( '/(?<=:) +/', '', $css ); // Remove spaces after a property's colon.
-
-	wp_add_inline_style( 'wp-block-post-featured-image', $css );
-}
-
-add_action( 'enqueue_block_assets', add_post_featured_image_style(...) );

@@ -1,0 +1,9 @@
+.wp-block-post-featured-image :where(figcaption) {
+	margin-bottom: 1em;
+	margin-top: .5em;
+}
+
+.wp-block-post-featured-image figcaption a {
+	display: inline;
+	height: auto;
+}
