@@ -31,18 +31,15 @@ const BLOCK_NAME = 'core/post-featured-image';
  * This ensures WordPress is aware of our custom attribute and handles its saving
  * and availability in server-side rendering contexts.
  *
- * @param array|mixed $settings Existing block type settings.
- * @param array       $metadata Block metadata.
- * @return array Modified block type settings.
+ * @param array{ attributes?: array<string, array{ type: string, default: bool }> } $settings Existing block type settings.
+ * @param array{ name: non-empty-string }       $metadata Block metadata.
+ * @return array{ attributes?: array<string, array{ type: string, default: bool }> } Modified block type settings.
  */
 function add_show_caption_attribute_to_block_schema( mixed $settings, array $metadata ): array {
-	if ( ! is_array( $settings) ) {
+	if ( ! is_array( $settings) ) { // @phpstan-ignore function.alreadyNarrowedType (Because another plugin could do a bad thing.)
 		$settings = array();
 	}
 	if ( 'core/post-featured-image' === $metadata['name'] ) {
-		if ( ! isset( $settings['attributes'] ) ) {
-			$settings['attributes'] = [];
-		}
 		$settings['attributes']['showCaption'] = array(
 			'type'    => 'boolean',
 			'default' => false,
@@ -104,12 +101,12 @@ add_action( 'init', register_block_style(...) );
 /**
  * Filters the Featured Image block to add a caption on the singular template.
  *
- * @param string|mixed $block_content The block content.
+ * @param string $block_content The block content.
  * @param array{ attrs: array{ showCaption?: boolean } } $attributes The block attributes.
  * @return string The filtered block content.
  */
 function filter_featured_image_block( mixed $block_content, array $attributes ): string {
-	if ( ! is_string( $block_content ) ) {
+	if ( ! is_string( $block_content ) ) { // @phpstan-ignore function.alreadyNarrowedType (Because another plugin could do a bad thing.)
 		$block_content = '';
 	}
 
@@ -149,7 +146,7 @@ function filter_featured_image_block( mixed $block_content, array $attributes ):
 			)
 		);
 
-		$block_content = preg_replace(
+		$block_content = (string) preg_replace(
 			'#(?=</figure>)#',
 			'<figcaption class="wp-element-caption">' . $caption . '</figcaption>',
 			$block_content,

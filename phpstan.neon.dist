@@ -1,0 +1,7 @@
+parameters:
+	level: 10
+	paths:
+		- .
+	excludePaths:
+		- vendor
+		- node_modules

@@ -1,0 +1,17 @@
+{
+	"name": "westonruter/featured-image-block-with-caption",
+	"type": "wordpress-plugin",
+	"require-dev": {
+		"phpstan/phpstan": "^2.1",
+		"szepeviktor/phpstan-wordpress": "^2.0",
+		"phpstan/extension-installer": "^1.4"
+	},
+	"scripts": {
+		"phpstan": "phpstan analyse --memory-limit=2048M"
+	},
+	"config": {
+		"allow-plugins": {
+			"phpstan/extension-installer": true
+		}
+	}
+}
