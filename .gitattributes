@@ -1,0 +1,7 @@
+.editorconfig export-ignore
+.gitignore export-ignore
+.gitattributes export-ignore
+package.json export-ignore
+package-lock.json export-ignore
+tsconfig.json export-ignore
+types.ts export-ignore
