@@ -58,7 +58,7 @@
 								{
 									className: 'wp-element-caption',
 								},
-								'(Any caption provided for the current featured image in the Media Library will go here.)', // TODO: Translate.
+								'(Any caption provided for the current featured image in the Media Library will go here.)' // TODO: Translate.
 						  )
 						: null
 				);

@@ -99,7 +99,6 @@ function register_block_style(): void {
 	);
 	wp_style_add_data( STYLE_HANDLE, 'path', plugin_dir_path( __FILE__ ) . '/block.css' );
 }
-
 add_action( 'init', register_block_style(...) );
 
 /**
@@ -163,7 +162,6 @@ function filter_featured_image_block( mixed $block_content, array $attributes ):
 
 	return $block_content;
 }
-
 add_filter(
 	'render_block_' . BLOCK_NAME,
 	filter_featured_image_block(...),

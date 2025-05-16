@@ -1,21 +1,27 @@
 {
-  "name": "featured-image-block-with-caption",
-  "author": "Weston Ruter",
-  "license": "GPL-2.0-or-later",
-  "description": "",
-  "prettier": "@wordpress/prettier-config",
-  "devDependencies": {
-    "@wordpress/block-editor": "^14.18.0",
-    "@wordpress/components": "^29.9.0",
-    "@wordpress/compose": "^7.23.0",
-    "@wordpress/element": "^6.23.0",
-    "@wordpress/hooks": "^4.23.0",
-    "@wordpress/i18n": "^5.23.0",
-    "@wordpress/scripts": "^30.16.0",
-    "typescript": "^5.8.3"
-  },
-  "scripts": {
-    "tsc": "tsc",
-    "dist": "zip featured-image-block-with-caption.zip featured-image-block-with-caption.php edit.js"
-  }
+	"name": "featured-image-block-with-caption",
+	"author": "Weston Ruter",
+	"license": "GPL-2.0-or-later",
+	"description": "",
+	"prettier": "@wordpress/prettier-config",
+	"devDependencies": {
+		"@wordpress/block-editor": "^14.18.0",
+		"@wordpress/components": "^29.9.0",
+		"@wordpress/compose": "^7.23.0",
+		"@wordpress/element": "^6.23.0",
+		"@wordpress/hooks": "^4.23.0",
+		"@wordpress/i18n": "^5.23.0",
+		"@wordpress/scripts": "^30.16.0",
+		"typescript": "^5.8.3"
+	},
+	"scripts": {
+		"check-engines": "wp-scripts check-engines",
+		"dist": "zip featured-image-block-with-caption.zip featured-image-block-with-caption.php edit.js",
+		"format": "wp-scripts format",
+		"lint:css": "wp-scripts lint-style",
+		"lint:js": "tsc && wp-scripts lint-js",
+		"lint:pkg-json": "wp-scripts lint-pkg-json",
+		"packages-update": "wp-scripts packages-update",
+		"tsc": "tsc"
+	}
 }
