@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: Featured Image Block with Caption
- * Plugin URI:
- * Description: Adds captions to the Featured Image block on the singular template.
+ * Plugin URI: https://github.com/westonruter/featured-image-block-with-caption
+ * Description: Adds the ability to show a caption in the Featured Image block via the same "Add caption" block toolbar button available on the Image block. Image captions must be edited in the Media Library. This is a prototype to implement <a href="https://github.com/WordPress/gutenberg/issues/40946">gutenberg#40946</a>.
  * Requires at least: 6.5
  * Requires PHP: 8.1
  * Version: 0.1.0
@@ -10,8 +10,8 @@
  * Author URI: https://weston.ruter.net/
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * Update URI: ...
- * Gist Plugin URI: ...
+ * Update URI: https://github.com/westonruter/featured-image-block-with-caption
+ * GitHub Plugin URI: https://github.com/westonruter/featured-image-block-with-caption
  *
  * @package FeaturedImageBlockWithCaption
  */

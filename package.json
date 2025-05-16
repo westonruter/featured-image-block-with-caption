@@ -22,6 +22,6 @@
 		"lint:js": "wp-scripts lint-js",
 		"lint:pkg-json": "wp-scripts lint-pkg-json",
 		"packages-update": "wp-scripts packages-update",
-		"plugin-zip": "zip featured-image-block-with-caption.zip featured-image-block-with-caption.php edit.js"
+		"plugin-zip": "git archive --format=zip --output=featured-image-block-with-caption.zip HEAD"
 	}
 }
