@@ -19,8 +19,6 @@
 		} )
 	);
 
-	const TEXT_DOMAIN = 'featured-image-with-caption';
-
 	const withFeaturedImageCaptionControl = createHigherOrderComponent(
 		( BlockEdit ) => {
 			return ( props ) => {
@@ -34,8 +32,8 @@
 				const toolbarButton = createElement( ToolbarButton, {
 					icon: captionIcon,
 					label: showCaption
-						? __( 'Remove caption', 'default' )
-						: __( 'Add caption', 'default' ),
+						? __( 'Remove caption' ) // Text domain omitted to re-use strings in WP core.
+						: __( 'Add caption' ),
 					onClick: () =>
 						setAttributes( { showCaption: ! showCaption } ),
 					isActive: !! showCaption,
@@ -57,11 +55,10 @@
 					showCaption
 						? createElement(
 								'figcaption',
-								{},
-								__(
-									'[Caption will be displayed from media library on front-end]', // TODO: Translate.
-									TEXT_DOMAIN
-								)
+								{
+									className: 'wp-element-caption',
+								},
+								'(Any caption provided for the current featured image in the Media Library will go here.)', // TODO: Translate.
 						  )
 						: null
 				);
