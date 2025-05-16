@@ -1,3 +1,4 @@
+// This JavaScript requires no build step!
 ( function ( wp ) {
 	'use strict';
 
@@ -21,6 +22,14 @@
 
 	const withFeaturedImageCaptionControl = createHigherOrderComponent(
 		( BlockEdit ) => {
+			/**
+			 * @param {object} props
+			 * @param {string} props.name
+			 * @param {object} props.attributes
+			 * @param {boolean} props.attributes.showCaption
+			 * @param {Function} props.setAttributes
+			 * @return ReactElement
+			 */
 			return ( props ) => {
 				if ( props.name !== 'core/post-featured-image' ) {
 					return createElement( BlockEdit, props );
