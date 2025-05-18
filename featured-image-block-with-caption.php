@@ -21,8 +21,6 @@ namespace FeaturedImageBlockWithCaption;
 
 const VERSION = '0.1.0';
 
-const STYLE_HANDLE = 'featured-image-block-with-caption';
-
 const BLOCK_NAME = 'core/post-featured-image';
 
 /**
