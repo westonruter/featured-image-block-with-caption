@@ -1,23 +1,32 @@
 {
 	"name": "westonruter/featured-image-block-with-caption",
 	"type": "wordpress-plugin",
-	"require-dev": {
-		"phpstan/phpstan": "^2.1",
-		"szepeviktor/phpstan-wordpress": "^2.0",
-		"phpstan/extension-installer": "^1.4",
-		"wp-coding-standards/wpcs": "^3.0",
-		"phpcompatibility/php-compatibility": "^9.3",
-		"slevomat/coding-standard": "^8.18"
+	"version": "dev-main",
+	"require": {
+		"php": "^8.1"
 	},
-	"scripts": {
-		"phpstan": "phpstan analyse --memory-limit=2048M",
-		"phpcs": "phpcs",
-		"phpcbf": "phpcbf"
+	"require-dev": {
+		"ergebnis/composer-normalize": "^2.47",
+		"phpcompatibility/php-compatibility": "^9.3",
+		"phpstan/extension-installer": "^1.4",
+		"phpstan/phpstan": "^2.1",
+		"slevomat/coding-standard": "^8.18",
+		"szepeviktor/phpstan-wordpress": "^2.0",
+		"wp-coding-standards/wpcs": "^3.0"
 	},
 	"config": {
 		"allow-plugins": {
-			"phpstan/extension-installer": true,
-			"dealerdirect/phpcodesniffer-composer-installer": true
+			"dealerdirect/phpcodesniffer-composer-installer": true,
+			"ergebnis/composer-normalize": true,
+			"phpstan/extension-installer": true
+		},
+		"platform": {
+			"php": "8.1"
 		}
+	},
+	"scripts": {
+		"phpcbf": "phpcbf",
+		"phpcs": "phpcs",
+		"phpstan": "phpstan analyse --memory-limit=2048M"
 	}
 }
