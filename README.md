@@ -6,8 +6,6 @@ Stable tag:   0.1.0
 License:      [GPLv2](https://www.gnu.org/licenses/gpl-2.0.html) or later  
 Tags:         block theme, featured image, site editor, caption
 
-Adds the ability to show a caption in the Featured Image block via the same "Add caption" block toolbar button available on the Image block.
-
 ## Description ##
 
 This plugin adds the ability to show a caption in the Featured Image block via the same "Add caption" block toolbar button available on the Image block. Image captions must be edited in the Media Library.
