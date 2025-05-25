@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="Featured Image Block with Caption">
+<ruleset name="featured-image-block-with-caption">
 	<config name="text_domain" value="featured-image-block-with-caption"/>
 
 	<rule ref="PHPCompatibility"/>
