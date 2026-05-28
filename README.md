@@ -1,7 +1,7 @@
 # Featured Image Block with Caption #
 
 Contributors: [westonruter](https://profile.wordpress.org/westonruter)  
-Tested up to: 6.9  
+Tested up to: 7.0  
 Stable tag:   0.1.0  
 License:      [GPLv2](https://www.gnu.org/licenses/gpl-2.0.html) or later  
 Tags:         block theme, featured image, site editor, caption
