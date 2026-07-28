@@ -12,7 +12,7 @@
 		"phpstan/phpstan": "^2.1",
 		"slevomat/coding-standard": "^8.18",
 		"szepeviktor/phpstan-wordpress": "^2.0",
-		"wp-coding-standards/wpcs": "^3.0"
+		"wp-coding-standards/wpcs": "3.4.1"
 	},
 	"config": {
 		"allow-plugins": {
